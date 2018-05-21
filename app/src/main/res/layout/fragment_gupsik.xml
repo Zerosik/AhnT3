@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width ="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/DatePick"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="TextView"
+        android:textSize="30dp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/nextMealTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="급식"
+        android:textAlignment="center" />
+    <LinearLayout
+        android:weightSum="3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/setMorning"
+            android:layout_weight="1"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:text="아침" />
+        <Button
+            android:id="@+id/setLunch"
+            android:layout_weight="1"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:text="점심" />
+        <Button
+            android:id="@+id/setDinner"
+            android:layout_weight="1"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:text="저녁" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/nextMeal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+
+</LinearLayout>

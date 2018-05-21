@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/Regi_Email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="이메일"
+                android:inputType="textEmailAddress"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/Regi_PW"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/Regi_rePW"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="비밀번호 재입력"
+                android:inputType="textPassword"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/Regi_Name"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="이름"
+                android:inputType="textPersonName"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/Regi_ScGrade"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="학년"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textSize="30dp" />
+            <EditText
+                android:id="@+id/Regi_ScClass"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="반"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textSize="30dp" />
+            <EditText
+                android:id="@+id/Regi_ScNum"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="번호"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textSize="30dp" />
+            <Spinner
+                android:id="@+id/Regi_Gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/Regi_Phone"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="전화번호"
+                android:inputType="textPersonName"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/RegisterConfirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="70dp"
+        android:layout_marginTop="10dp"
+        android:hint="아이디"
+        android:text="Confirm" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
