@@ -103,13 +103,13 @@ public class LeaveFragment extends Fragment {
                                     resultJson = (ResponseOutJson)converter.ConvertObjectToJson(output, 2);
                                     if(resultJson.getStatus() == 400)
                                         Toast.makeText(getActivity(), "입력 양식이 부적절합니다.", Toast.LENGTH_SHORT).show();
-                                    if(resultJson.getStatus() == 500)
+                                    else if(resultJson.getStatus() == 500)
                                         Toast.makeText(getActivity(), "서버 문제로 신청 할 수 없습니다.\n 잠시 후 다시 시도하십시오", Toast.LENGTH_SHORT).show();
-                                    if(resultJson.getStatus() == 412)
+                                    else if(resultJson.getStatus() == 412)
                                         Toast.makeText(getActivity(), "날짜가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                    if(resultJson.getStatus() == 409)
+                                    else if(resultJson.getStatus() == 409)
                                         Toast.makeText(getActivity(), "이미 신청하엿습니다.", Toast.LENGTH_SHORT).show();
-                                    if(resultJson.getStatus() == 200){
+                                    else if(resultJson.getStatus() == 200){
                                         //TODO: 신청 성공 시, DB저장 및 refresh?
                                         Toast.makeText(getActivity(), "외출/외박이 신청되엇습니다.", Toast.LENGTH_SHORT).show();
                                         //Log.i("response",resultJson.toString());
@@ -118,6 +118,8 @@ public class LeaveFragment extends Fragment {
 //                                        intent.putExtra("toast", "로그인에 성공하셧습니다.");
 //                                        startActivity(intent);
                                         //finish();
+                                    }else{
+                                        Toast.makeText(getActivity(), "뭔가..뭔가 잘못됨..", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
