@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +32,7 @@ public class LoginActivity extends AppCompatActivity{
     Button register_button;
     ResponseLoginJson resultJson = null;
     PatternChecker pc = new PatternChecker();
+    String FIrebaseToken =  FirebaseInstanceId.getInstance().getToken();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,7 @@ public class LoginActivity extends AppCompatActivity{
                             }
                             json.put("email", email);
                             json.put("pw", pw);
+                            json.put("registration_token", FIrebaseToken);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
