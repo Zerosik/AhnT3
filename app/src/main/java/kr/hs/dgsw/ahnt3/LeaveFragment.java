@@ -2,10 +2,12 @@ package kr.hs.dgsw.ahnt3;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,12 +114,7 @@ public class LeaveFragment extends Fragment {
                                     else if(resultJson.getStatus() == 200){
                                         //TODO: 신청 성공 시, DB저장 및 refresh?
                                         Toast.makeText(getActivity(), "외출/외박이 신청되엇습니다.", Toast.LENGTH_SHORT).show();
-                                        //Log.i("response",resultJson.toString());
-//                                        dbHelper.insertTokenData(resultJson.getToken());
-//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                        intent.putExtra("toast", "로그인에 성공하셧습니다.");
-//                                        startActivity(intent);
-                                        //finish();
+                                        Log.i("response",resultJson.toString());
                                     }else{
                                         Toast.makeText(getActivity(), "뭔가..뭔가 잘못됨..", Toast.LENGTH_SHORT).show();
                                     }

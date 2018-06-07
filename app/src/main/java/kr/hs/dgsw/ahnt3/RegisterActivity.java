@@ -92,8 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         //input array data
         final ArrayList<String> list = new ArrayList<>();
-        list.add("남성");
-        list.add("여성");
+        list.add(new String("남성"));
+        list.add(new String("여성"));
         //using ArrayAdapter
         ArrayAdapter spinnerAdapter;
         spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list);
@@ -108,8 +108,8 @@ public class RegisterActivity extends AppCompatActivity {
         data.Email = ((TextView)findViewById(R.id.Regi_Email)).getText().toString();
         data.Gender = ((Spinner)findViewById(R.id.Regi_Gender)).getSelectedItem().toString();
         data.Mobile = ((TextView)findViewById(R.id.Regi_Phone)).getText().toString();
-        data.sccls = Integer.parseInt(((TextView)findViewById(R.id.Regi_ScClass)).getText().toString());
         data.scgrd = Integer.parseInt(((TextView)findViewById(R.id.Regi_ScGrade)).getText().toString());
+        data.sccls = Integer.parseInt(((TextView)findViewById(R.id.Regi_ScClass)).getText().toString());
         data.scnum = Integer.parseInt(((TextView)findViewById(R.id.Regi_ScNum)).getText().toString());
 
         return data;
