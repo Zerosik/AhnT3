@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -63,7 +64,28 @@ public class NetworkHelper {
         return result;
     }
 
+    public static String GET(String url, String token){
+        HttpResponse httpResponse = null;
+        InputStream inputStream;
+        String result = "";
+        HttpClient httpClient = new DefaultHttpClient();
 
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.setHeader("Accept", "application/json");
+        httpGet.setHeader("Content-type", "application/json");
+        httpGet.setHeader("x-access-token", token);
+
+
+        try{
+            httpResponse = httpClient.execute(httpGet);
+            inputStream = httpResponse.getEntity().getContent();
+            result = convertInputStreamToString(inputStream);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
