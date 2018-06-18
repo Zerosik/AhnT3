@@ -72,14 +72,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Cursor getLeaveList(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from LEAVE limit 5 ", null);
+        Cursor res = db.rawQuery("select * from LEAVE ", null);
         return res;
     }
     public boolean insertLeaveData(ResponseOutJson json){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("start_date", json.getStartDate());
-        contentValues.put("end_date", json.getEndDate());
+        contentValues.put("start_date", json.getStartDate().replace("T", " ").substring(0, 16));
+        contentValues.put("end_date", json.getEndDate().replace("T", " ").substring(0, 16));
         contentValues.put("reason", json.getReason());
         long result =  db.insert("LEAVE", null, contentValues);
 

@@ -24,90 +24,91 @@ public class ResponseOutJson implements Serializable {
     public String getReason(){ return data.go_out.reason;}
 
 
-    class Data{
-        go_out go_out;
-        sleep_out sleep_out;
 
-        public go_out getGo_out() {
-            return go_out;
-        }
+}
+class Data{
+    go_out go_out;
+    sleep_out sleep_out;
 
-        public sleep_out getSleep_out() {
-            return sleep_out;
-        }
+    public go_out getGo_out() {
+        return go_out;
     }
-    class go_out{
-        int accept;
-        int idx;
-        String start_time;
-        String end_time;
-        String reason;
-        int class_idx;
-        String student_email;
 
-        public int getAccept() {
-            return accept;
-        }
-
-        public int getIdx() {
-            return idx;
-        }
-
-        public String getStart_time() {
-            return start_time;
-        }
-
-        public String getEnd_time() {
-            return end_time;
-        }
-
-        public String getReason() {
-            return reason;
-        }
-
-        public int getClass_idx() {
-            return class_idx;
-        }
-
-        public String getStudent_email() {
-            return student_email;
-        }
+    public sleep_out getSleep_out() {
+        return sleep_out;
     }
-    class sleep_out{
-        int accept;
-        int idx;
-        String start_time;
-        String end_time;
-        String reason;
-        int class_idx;
-        String student_email;
+}
+class go_out{
+    int accept;
+    int idx;
+    String start_time;
+    String end_time;
+    String reason;
+    int class_idx;
+    String student_email;
 
-        public int getAccept() {
-            return accept;
-        }
+    public int getAccept() {
+        return accept;
+    }
 
-        public int getIdx() {
-            return idx;
-        }
+    public int getIdx() {
+        return idx;
+    }
 
-        public String getStart_time() {
-            return start_time;
-        }
+    public String getStart_time() {
+        return start_time;
+    }
 
-        public String getEnd_time() {
-            return end_time;
-        }
+    public String getEnd_time() {
+        return end_time;
+    }
 
-        public String getReason() {
-            return reason;
-        }
+    public String getReason() {
+        return reason;
+    }
 
-        public int getClass_idx() {
-            return class_idx;
-        }
+    public int getClass_idx() {
+        return class_idx;
+    }
 
-        public String getStudent_email() {
-            return student_email;
-        }
+    public String getStudent_email() {
+        return student_email;
+    }
+}
+class sleep_out{
+    int accept;
+    int idx;
+    String start_time;
+    String end_time;
+    String reason;
+    int class_idx;
+    String student_email;
+
+    public int getAccept() {
+        return accept;
+    }
+
+    public int getIdx() {
+        return idx;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public int getClass_idx() {
+        return class_idx;
+    }
+
+    public String getStudent_email() {
+        return student_email;
     }
 }

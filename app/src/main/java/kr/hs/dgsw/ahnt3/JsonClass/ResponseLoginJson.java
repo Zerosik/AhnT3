@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ResponseLoginJson implements Serializable {
     int status;
     String message;
-    Data data;
+    LoginData data;
 
     public String getToken(){ return data.getToken(); }
 
@@ -17,7 +17,7 @@ public class ResponseLoginJson implements Serializable {
         return message;
     }
 
-    public Data getData() {
+    public LoginData getData() {
         return data;
     }
 
@@ -25,7 +25,7 @@ public class ResponseLoginJson implements Serializable {
 
 }
 
-class Data
+class LoginData
 {
     String token;
     User user;

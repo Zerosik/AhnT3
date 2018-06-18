@@ -1,33 +1,24 @@
 package kr.hs.dgsw.ahnt3;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ParseException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.hyunjun.school.SchoolMenu;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.hyunjun.school.School;
-import org.hyunjun.school.SchoolMenu;
-import org.hyunjun.school.SchoolException;
-import org.w3c.dom.Text;
 
 import kr.hs.dgsw.ahnt3.Networks.MealAsyncTask;
 
@@ -65,13 +56,11 @@ public class GupsikFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Button morningButton = getView().findViewById(R.id.setMorning);
-        Button lunchButton = getView().findViewById(R.id.setLunch);
-        Button dinnerButton = getView().findViewById(R.id.setDinner);
+
         getDate = getView().findViewById(R.id.DatePick);
         nextMealKind = getView().findViewById(R.id.nextMealTV);
         nextMeal = getView().findViewById(R.id.nextMeal);
-
+        initOnClickListener();
         calendar = Calendar.getInstance();
 
         year = calendar.get(Calendar.YEAR);
@@ -80,6 +69,14 @@ public class GupsikFragment extends Fragment {
         this.getDate.setText(year + "년 " + month + "월 " + (day+1) + "일");
         updateDateMeal(year, month, day);
 
+
+
+    }
+
+    private void initOnClickListener(){
+        Button morningButton = getView().findViewById(R.id.setMorning);
+        Button lunchButton = getView().findViewById(R.id.setLunch);
+        Button dinnerButton = getView().findViewById(R.id.setDinner);
         morningButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -121,7 +118,6 @@ public class GupsikFragment extends Fragment {
                 updateDateMeal(year, month+1, dayOfMonth-1);
             }
         };
-
     }
     private void getDate(){
         Calendar cal = Calendar.getInstance();
@@ -177,7 +173,7 @@ public class GupsikFragment extends Fragment {
             public void processFinish(SchoolMenu result) {
                 menu = result;
                 setAutoMeal();
-                Toast.makeText(getContext(), "업데이트 되었습니다!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "업데이트 되었습니다!", Toast.LENGTH_SHORT).show();
             }
         }).execute(year, month, day);
     }

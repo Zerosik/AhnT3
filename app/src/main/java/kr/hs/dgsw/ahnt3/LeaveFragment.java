@@ -2,26 +2,31 @@ package kr.hs.dgsw.ahnt3;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import kr.hs.dgsw.ahnt3.CustomListView.ListViewAdapter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import kr.hs.dgsw.ahnt3.CustomView.DataList;
+import kr.hs.dgsw.ahnt3.CustomView.RecyclerAdapter;
 import kr.hs.dgsw.ahnt3.JsonClass.JsonConverter;
 import kr.hs.dgsw.ahnt3.JsonClass.ResponseOutJson;
 import kr.hs.dgsw.ahnt3.Networks.AsyncResponse;
@@ -42,49 +47,123 @@ public class LeaveFragment extends Fragment {
     String uri = "http://flow.cafe24app.com/";
     ResponseOutJson resultJson;
     String Token;
-    private OnFragmentInteractionListener mListener;
+    private LeaveFragment.OnFragmentInteractionListener mListener;
     private Button applicationButton;
-    private ListView mListView = null;
-    private ListViewAdapter mListViewAdapter = null;
 
+    private RecyclerAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<DataList> mData;
 
     public LeaveFragment() {
-        // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_leave, container, false);
+
+
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.Leavelistview);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(0);
+        mAdapter = new RecyclerAdapter(mData);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        dbHelper = new DBHelper(getActivity());
+
         applicationButton = (Button)getView().findViewById(R.id.applicationButton);
         Token = dbHelper.getDbToken();
+
         InitApplicationButon();
-        ListView listview = getView().findViewById(R.id.Leavelistview);
+    }
+    public void InitSampleLeaveListView(){
+        mData = new ArrayList<>();
+        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason1"));
+        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason2"));
+        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason3"));
+
     }
 
     public void InitLeaveListView(){
+        mData = new ArrayList<>();
         Cursor res = dbHelper.getLeaveList();
-        if(res.moveToNext()){
+        while(res.moveToNext()){
+            String startTime = res.getString(1);
 
+            String endTime = res.getString(2);
+
+            String reason = res.getString(3);
+            String date = startTime + " ~ " + endTime;
+            mData.add(new DataList("", date, reason));
         }
     }
+    public void AddListData(ResponseOutJson data){
 
+
+        if(dbHelper.insertLeaveData(data)) {
+            String startdate = data.getStartDate().replace("T", " ").substring(0, 16);
+            String enddate = data.getEndDate().replace("T", " ").substring(0, 16);
+            mData.add(new DataList("", startdate + " ~ " + enddate, data.getReason()));
+            mAdapter.notifyItemInserted(mData.size() - 1);
+        }else{
+            Log.i("msg","insert failed");
+        }
+    }
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        dbHelper = new DBHelper(getActivity());
+        InitLeaveListView();
     }
 
     public void InitApplicationButon(){
+
         applicationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                final AlertDialog dialog;
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_application, null);
                 final EditText startTime = (EditText)mView.findViewById(R.id.startDate);
                 final EditText endTime = (EditText)mView.findViewById(R.id.endDate);
                 final EditText ReasonText = (EditText)mView.findViewById(R.id.reason);
                 Button Confirm = (Button) mView.findViewById(R.id.appliConfirm);
 
+                mBuilder.setView(mView);
+                dialog = mBuilder.create();
+                dialog.show();
+
+// region InitDate
+                String fMonth;
+                String fDay;
+                Calendar currentTime = Calendar.getInstance();
+                if((currentTime.get(Calendar.MONTH)+1)<10)
+                    fMonth = "0"+(currentTime.get(Calendar.MONTH)+1);
+                else
+                    fMonth = ""+(currentTime.get(Calendar.MONTH)+1);
+
+                if(currentTime.get(Calendar.DATE)<10)
+                    fDay = "0"+currentTime.get(Calendar.DATE);
+                else
+                    fDay = ""+currentTime.get(Calendar.DATE);
+                String datestr = currentTime.get(Calendar.YEAR)+"-"+fMonth+"-"+fDay+" ";
+                long time = System.currentTimeMillis();
+                SimpleDateFormat dayTime = new SimpleDateFormat("hh:mm");
+                String timestr = dayTime.format(new Date(time));
+
+                startTime.setText(datestr + timestr);
+                endTime.setText(datestr + timestr);
+// endregion
                 Confirm.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
@@ -115,6 +194,8 @@ public class LeaveFragment extends Fragment {
                                         //TODO: 신청 성공 시, DB저장 및 refresh?
                                         Toast.makeText(getActivity(), "외출/외박이 신청되엇습니다.", Toast.LENGTH_SHORT).show();
                                         Log.i("response",resultJson.toString());
+                                        AddListData(resultJson);
+                                        dialog.dismiss();
                                     }else{
                                         Toast.makeText(getActivity(), "뭔가..뭔가 잘못됨..", Toast.LENGTH_SHORT).show();
                                     }
@@ -126,20 +207,11 @@ public class LeaveFragment extends Fragment {
                         }
                     }
                 });
-                mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
-                dialog.show();
             }
         });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leave, container, false);
 
-    }
 // region overrideMethods
     // TODO: Rename and change types and number of parameters
     public static LeaveFragment newInstance(String param1, String param2) {
@@ -153,7 +225,7 @@ public class LeaveFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            mListener = (LeaveFragment.OnFragmentInteractionListener) context;
         } else {
 
         }
@@ -170,10 +242,6 @@ public class LeaveFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 // endregion
-    private class VIewHolder{
-        public ImageView mIcon;
-        public TextView mText;
-        public TextView mDate;
-    }
+
 }
 

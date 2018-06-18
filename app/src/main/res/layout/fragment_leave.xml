@@ -6,7 +6,6 @@
     tools:context=".LeaveFragment">
 
     <LinearLayout
-        android:id="@+id/email_login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -19,9 +18,10 @@
             android:textAlignment="center"
             android:textSize="36sp" />
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/Leavelistview"
             android:layout_width="match_parent"
+            android:scrollbars="vertical"
             android:layout_height="0dp"
             android:layout_weight="0.8"
             android:choiceMode="multipleChoice"
