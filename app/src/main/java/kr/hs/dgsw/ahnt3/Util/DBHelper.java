@@ -94,7 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues cv = new ContentValues();
-            cv.put("status", 1);
+            cv.put("confirm", 1);
             long result = db.update("LEAVE", cv, "idx=?", new String[]{idx});
 
         }catch (Exception e) {

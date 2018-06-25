@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import kr.hs.dgsw.ahnt3.JsonClass.ResponseLoginJson;
 
 public class MainActivity extends AppCompatActivity {
 

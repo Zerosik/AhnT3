@@ -18,7 +18,6 @@ import kr.hs.dgsw.ahnt3.JsonClass.JsonConverter;
 import kr.hs.dgsw.ahnt3.JsonClass.ResponseLoginJson;
 import kr.hs.dgsw.ahnt3.Networks.AsyncResponse;
 import kr.hs.dgsw.ahnt3.Networks.HttpAsyncTask;
-import kr.hs.dgsw.ahnt3.R;
 import kr.hs.dgsw.ahnt3.Util.PatternChecker;
 
 public class RegisterActivity extends AppCompatActivity {

@@ -22,9 +22,12 @@ public class myfirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.e("asdf", remoteMessage.getData().get("idx"));
 
-        Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
+        DBHelper dbHelper = new DBHelper(this);
+        String idx = remoteMessage.getData().get("idx");
+        Log.e("asdf", idx);
+        String type = remoteMessage.getData().get("type");
+        Log.d("asdf", "type : " + type);
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -40,6 +43,10 @@ public class myfirebaseMessagingService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
         }
         manager.notify(0, builder.build());
+        if(type.equals("go_out") || type.equals("sleep_out")) {
+            dbHelper.checkLeaveStatus(idx);
+        }
+
         //sendPushNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("body"));
     }
 

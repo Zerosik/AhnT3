@@ -1,5 +1,7 @@
 package kr.hs.dgsw.ahnt3.CustomView;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -43,7 +47,26 @@ public class notiRecyclerAdapter extends RecyclerView.Adapter<notiRecyclerAdapte
         }
         holder.mView.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+                final AlertDialog dialog;
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(view.getRootView().getContext());
+                LayoutInflater li = (LayoutInflater)view.getRootView().getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View mView = li.inflate(R.layout.dialog_notification, null);
+                mBuilder.setView(mView);
+                dialog = mBuilder.create();
+                dialog.show();
+                final TextView writer = mView.findViewById(R.id.notiDetailWriter);
+                final TextView writeTime = mView.findViewById(R.id.notiDetailUptime);
+                final TextView filename = mView.findViewById(R.id.notiDetailFileName);
+                final TextView content = mView.findViewById(R.id.notiDetailTitle);
+                JSONArray files = mDataset.get(position).NoticeFile;
+                try{
+                    writer.setText(mDataset.get(position).writer);
+                    writeTime.setText(mDataset.get(position).writeDate);
+                    content.setText(mDataset.get(position).content);
+                    filename.setText(files.getJSONObject(0).getString("upload_name"));
+                }catch (JSONException e){
 
+                }
             }
         });
     }

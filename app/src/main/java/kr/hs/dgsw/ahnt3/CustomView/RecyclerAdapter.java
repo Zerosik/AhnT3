@@ -33,7 +33,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String type;
-        if(mDataset.get(position).type == "out")
+        if(mDataset.get(position).type.equals("out"))
             type = "외출";
         else
             type = "외박";
