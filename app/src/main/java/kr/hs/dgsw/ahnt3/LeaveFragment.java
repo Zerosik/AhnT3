@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFormatException;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,34 +88,31 @@ public class LeaveFragment extends Fragment {
 
         InitApplicationButon();
     }
-    public void InitSampleLeaveListView(){
-        mData = new ArrayList<>();
-        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason1"));
-        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason2"));
-        mData.add(new DataList("", "06-01 13:13 ~ 45-12 53:15", "reason3"));
-
-    }
-
     public void InitLeaveListView(){
         mData = new ArrayList<>();
         Cursor res = dbHelper.getLeaveList();
         while(res.moveToNext()){
             String startTime = res.getString(1);
-
             String endTime = res.getString(2);
-
             String reason = res.getString(3);
+            int status = res.getInt(4);
+            String type = res.getString(5);
             String date = startTime + " ~ " + endTime;
-            mData.add(new DataList("", date, reason));
+            boolean bStatus;
+            if(status == 0){ bStatus = false; }else{ bStatus = true; }
+            mData.add(new DataList("", date, reason, bStatus, type));
         }
     }
-    public void AddListData(ResponseOutJson data){
+    public void AddListData(ResponseOutJson data, String type){
 
-
-        if(dbHelper.insertLeaveData(data)) {
+        if(type == "out/go")
+            type = "out";
+        else
+            type = "sleep";
+        if(dbHelper.insertLeaveData(data, type)) {
             String startdate = data.getStartDate().replace("T", " ").substring(0, 16);
             String enddate = data.getEndDate().replace("T", " ").substring(0, 16);
-            mData.add(new DataList("", startdate + " ~ " + enddate, data.getReason()));
+            mData.add(new DataList("", startdate + " ~ " + enddate, data.getReason(), false, type));
             mAdapter.notifyItemInserted(mData.size() - 1);
         }else{
             Log.i("msg","insert failed");
@@ -126,6 +126,7 @@ public class LeaveFragment extends Fragment {
         InitLeaveListView();
     }
 
+
     public void InitApplicationButon(){
 
         applicationButton.setOnClickListener(new View.OnClickListener(){
@@ -133,7 +134,7 @@ public class LeaveFragment extends Fragment {
             public void onClick(View v) {
                 final AlertDialog dialog;
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                View mView = getLayoutInflater().inflate(R.layout.dialog_application, null);
+                final View mView = getLayoutInflater().inflate(R.layout.dialog_application, null);
                 final EditText startTime = (EditText)mView.findViewById(R.id.startDate);
                 final EditText endTime = (EditText)mView.findViewById(R.id.endDate);
                 final EditText ReasonText = (EditText)mView.findViewById(R.id.reason);
@@ -169,6 +170,15 @@ public class LeaveFragment extends Fragment {
                     public void onClick(View v) {
                         if(!startTime.getText().toString().isEmpty() && !endTime.getText().toString().isEmpty() && !ReasonText.getText().toString().isEmpty()){
                             Toast.makeText(getActivity(), "신청하였습니다.", Toast.LENGTH_SHORT).show();
+                            RadioGroup radioGroup = (RadioGroup)mView.findViewById(R.id.LeaveTypeRadio);
+                            int radioButtonID = radioGroup.getCheckedRadioButtonId();
+                            View radioButton = radioGroup.findViewById(radioButtonID);
+                            int idx = radioGroup.indexOfChild(radioButton);
+                            final String leaveType;
+                            if(idx == 0)
+                                leaveType = "out/go";
+                            else
+                                leaveType = "out/sleep";
                             JSONObject json = new JSONObject();
                             try {
                                 json.put("start_time", startTime.getText());
@@ -191,17 +201,16 @@ public class LeaveFragment extends Fragment {
                                     else if(resultJson.getStatus() == 409)
                                         Toast.makeText(getActivity(), "이미 신청하엿습니다.", Toast.LENGTH_SHORT).show();
                                     else if(resultJson.getStatus() == 200){
-                                        //TODO: 신청 성공 시, DB저장 및 refresh?
                                         Toast.makeText(getActivity(), "외출/외박이 신청되엇습니다.", Toast.LENGTH_SHORT).show();
                                         Log.i("response",resultJson.toString());
-                                        AddListData(resultJson);
+                                        AddListData(resultJson, leaveType);
                                         dialog.dismiss();
                                     }else{
                                         Toast.makeText(getActivity(), "뭔가..뭔가 잘못됨..", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
-                            }).execute(uri+"out/go", json.toString(), Token);
+                            }).execute(uri+leaveType, json.toString(), Token);
                         }else{
                             Toast.makeText(getActivity(), "날짜와 이유를 반드시 기입해 주십시오.", Toast.LENGTH_SHORT).show();
                         }

@@ -4,9 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import kr.hs.dgsw.ahnt3.CustomView.notiDataList;
+import kr.hs.dgsw.ahnt3.CustomView.notiRecyclerAdapter;
+import kr.hs.dgsw.ahnt3.Networks.AsyncResponse;
+import kr.hs.dgsw.ahnt3.Networks.HttpAsyncTask;
+import kr.hs.dgsw.ahnt3.Util.DBHelper;
 
 
 /**
@@ -18,53 +34,95 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class NotificationFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    String uri = "http://flow.cafe24app.com/";
+    String Token;
+    DBHelper dbHelper;
+
+    private RecyclerView mRecyclerView;
+    private notiRecyclerAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<notiDataList> mData;
 
     private OnFragmentInteractionListener mListener;
 
     public NotificationFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NotificationFragment newInstance(String param1, String param2) {
         NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
+    public void InitNotiData(){
+
+        Token = dbHelper.getDbToken();
+        new HttpAsyncTask(new AsyncResponse() {
+            @Override
+            public void processFinish(String output) {
+                Log.e("asdf", "asdf");
+                    JSONObject json;
+                    int code;
+                    try{
+                        json = new JSONObject(output);
+                        code = json.getInt("status");
+                        if(code == 200) {
+                            JSONObject data = json.getJSONObject("data");
+                            JSONArray array = data.getJSONArray("list");
+                            for(int i = 0; i < array.length(); i++) {
+                                String wDate = array.getJSONObject(i).getString("write_date").replace("T", " ").substring(0, 16);
+                                String mDate = array.getJSONObject(i).getString("modify_date").replace("T", " ").substring(0, 16);
+                                mData.add(new notiDataList(
+                                        array.getJSONObject(i).getInt("idx"),
+                                        array.getJSONObject(i).getString("content"),
+                                        array.getJSONObject(i).getString("writer"),
+                                        wDate,
+                                        mDate,
+                                        array.getJSONObject(i).getJSONArray("notice_files")
+                                ));
+
+                            }
+                        }
+                        mAdapter.notifyItemInserted(mData.size() - 1);
+                    }catch(JSONException e){
+                        Log.i("asd","망한 부분이고욘\n"+output);
+                    }
+
+                }
+            }).execute(uri+"notice", null, Token);
+        }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        dbHelper = new DBHelper(getActivity());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+
+        mData = new ArrayList<>();
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.notiListView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(0);
+        mAdapter = new notiRecyclerAdapter(mData);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        InitNotiData();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -82,6 +140,13 @@ public class NotificationFragment extends Fragment {
         } else {
             //Toast.makeText(context, "Notification Fragment Attached", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
     }
 
     @Override

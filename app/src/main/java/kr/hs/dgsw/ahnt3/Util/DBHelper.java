@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String tokensql = "create table TOKEN(idx integer primary key autoincrement, token text);";
-        String leavesql = "create table LEAVE(idx integer primary key autoincrement, start_date text, end_date text, reason text)";
+        String leavesql = "create table LEAVE(idx integer, start_date text, end_date text, reason text, confirm integer, type text)";
         db.execSQL(tokensql);
         db.execSQL(leavesql);
     }
@@ -75,16 +75,31 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select * from LEAVE ", null);
         return res;
     }
-    public boolean insertLeaveData(ResponseOutJson json){
+    public boolean insertLeaveData(ResponseOutJson json, String type){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put("idx", json.getidx());
         contentValues.put("start_date", json.getStartDate().replace("T", " ").substring(0, 16));
         contentValues.put("end_date", json.getEndDate().replace("T", " ").substring(0, 16));
         contentValues.put("reason", json.getReason());
+        contentValues.put("confirm", 0);
+        contentValues.put("type", type);
         long result =  db.insert("LEAVE", null, contentValues);
 
         if(result == -1)
             return false;
         return true;
+    }
+    public void checkLeaveStatus(String idx){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("status", 1);
+            long result = db.update("LEAVE", cv, "idx=?", new String[]{idx});
+
+        }catch (Exception e) {
+            return;
+        }
+
     }
 }

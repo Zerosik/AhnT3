@@ -1,19 +1,11 @@
 package kr.hs.dgsw.ahnt3.Networks;
 
-import android.util.Log;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -73,7 +65,8 @@ public class NetworkHelper {
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Accept", "application/json");
         httpGet.setHeader("Content-type", "application/json");
-        httpGet.setHeader("x-access-token", token);
+        if(!token.equals(""))
+            httpGet.setHeader("x-access-token", token);
 
 
         try{

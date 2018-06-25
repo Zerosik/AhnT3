@@ -1,7 +1,6 @@
 package kr.hs.dgsw.ahnt3.Networks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Created by DH on 2018-04-10.
@@ -19,7 +18,10 @@ public class HttpAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... data) {
-        return network.POST(data[0], data[1], data[2]);
+        if(data[1] != null) {
+            return network.POST(data[0], data[1], data[2]);
+        }else
+            return network.GET(data[0], data[2]);
     }
 
     @Override
@@ -27,4 +29,4 @@ public class HttpAsyncTask extends AsyncTask<String, String, String> {
         delegate.processFinish(postResult);
     }
 }
-//endregionw
+//endregion

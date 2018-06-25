@@ -19,9 +19,30 @@ public class ResponseOutJson implements Serializable {
         return data;
     }
 
-    public String getStartDate(){ return data.go_out.start_time;}
-    public String getEndDate(){ return data.go_out.end_time;}
-    public String getReason(){ return data.go_out.reason;}
+    public String getStartDate(){
+        if(data.go_out != null)
+            return data.go_out.start_time;
+        else
+            return data.sleep_out.start_time;
+    }
+    public String getEndDate(){
+        if(data.go_out != null)
+            return data.go_out.end_time;
+        else
+            return data.sleep_out.end_time;
+    }
+    public String getReason(){
+        if(data.go_out != null)
+            return data.go_out.reason;
+        else
+            return data.sleep_out.reason;
+    }
+    public int getidx(){
+        if(data.go_out != null)
+            return data.go_out.idx;
+        else
+            return data.sleep_out.idx;
+    }
 
 
 

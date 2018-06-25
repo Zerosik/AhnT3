@@ -33,6 +33,26 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="외출 사유를 적어주세요."/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LeaveTypeRadio"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LeaveTypeOut"
+            android:layout_weight="1"
+            android:text="외출"
+            android:checked="true" />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LeaveTypeSleep"
+            android:layout_weight="1"
+            android:text="외박"/>
+
+    </RadioGroup>
     <Button
         android:id="@+id/appliConfirm"
         android:layout_width="match_parent"
